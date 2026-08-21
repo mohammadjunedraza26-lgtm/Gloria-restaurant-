@@ -4,7 +4,20 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gloria Restaurant - Admin Panel</title>
+  <title>Gloria Restaurant - Admin Panel</title> <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBEmJ1LRLctWqlMbf74Omxa0Uq7nX6jgk",
+    authDomain: "gloria-restaurant-admine-panel.firebaseapp.com",
+    databaseURL: "https://gloria-restaurant-admine-panel-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "gloria-restaurant-admine-panel",
+    storageBucket: "gloria-restaurant-admine-panel.firebasestorage.app",
+    messagingSenderId: "372532145352",
+    appId: "1:372532145352:web:509be55fb29da2a06c49fd"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+  </script>
 
   <style>
     * {
