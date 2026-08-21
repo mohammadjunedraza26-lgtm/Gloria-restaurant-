@@ -1,544 +1,1374 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<head>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gloria Restaurant - Admin Panel</title> <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyBEmJ1LRLctWqlMbf74Omxa0Uq7nX6jgk",
-    authDomain: "gloria-restaurant-admine-panel.firebaseapp.com",
-    databaseURL: "https://gloria-restaurant-admine-panel-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "gloria-restaurant-admine-panel",
-    storageBucket: "gloria-restaurant-admine-panel.firebasestorage.app",
-    messagingSenderId: "372532145352",
-    appId: "1:372532145352:web:509be55fb29da2a06c49fd"
-  };
 
-  firebase.initializeApp(firebaseConfig);
-  const database = firebase.database();
-  </script>
+  <title>Gloria Restaurant - Admin Panel</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
 
-    body {
-      background: #f5f6fa;
-      color: #222;
-    }
-
-    .header {
-      background: #111827;
-      color: white;
-      padding: 18px 25px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .header h1 {
-      font-size: 22px;
-    }
-
-    .logout {
-      background: #ef4444;
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 7px;
-      cursor: pointer;
-    }
-
-    .container {
-      padding: 25px;
-      max-width: 1300px;
-      margin: auto;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 18px;
-      margin-bottom: 30px;
-    }
-
-    .card {
-      background: white;
-      padding: 22px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,.08);
-    }
-
-    .card h3 {
-      color: #666;
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
-
-    .card p {
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    .section {
-      background: white;
-      padding: 22px;
-      border-radius: 12px;
-      margin-bottom: 25px;
-      box-shadow: 0 2px 10px rgba(0,0,0,.08);
-    }
-
-    .section h2 {
-      margin-bottom: 18px;
-    }
-
-    .form {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-    }
-
-    input, select {
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 7px;
-      width: 100%;
-    }
-
-    button {
-      border: none;
-      padding: 11px 16px;
-      border-radius: 7px;
-      cursor: pointer;
-    }
-
-    .add {
-      background: #16a34a;
-      color: white;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-      overflow-x: auto;
-    }
-
-    th, td {
-      padding: 13px;
-      border-bottom: 1px solid #eee;
-      text-align: left;
-    }
-
-    th {
-      background: #f3f4f6;
-    }
-
-    .status {
-      padding: 6px 9px;
-      border-radius: 5px;
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .delete {
-      background: #dc2626;
-      color: white;
-    }
-
-    .update {
-      background: #2563eb;
-      color: white;
-    }
-
-    .empty {
-      color: #777;
-      padding: 15px 0;
-    }
-
-    @media(max-width:700px) {
-      .container {
-        padding: 15px;
-      }
-
-      table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-  <header class="header">
-    <h1>🍽️ Gloria Restaurant Admin</h1>
-    <button class="logout" onclick="logout()">Logout</button>
-  </header>
-
-  <main class="container">
-
-    <!-- DASHBOARD -->
-    <div class="cards">
-
-      <div class="card">
-        <h3>Total Orders</h3>
-        <p id="totalOrders">0</p>
-      </div>
-
-      <div class="card">
-        <h3>Total Sales</h3>
-        <p id="totalSales">₹0</p>
-      </div>
-
-      <div class="card">
-        <h3>Customers</h3>
-        <p id="totalCustomers">0</p>
-      </div>
-
-      <div class="card">
-        <h3>Food Items</h3>
-        <p id="totalItems">0</p>
-      </div>
-
-    </div>
-
-    <!-- FOOD MANAGEMENT -->
-    <section class="section">
-
-      <h2>🍔 Food Items Management</h2>
-
-      <div class="form">
-
-        <input
-          type="text"
-          id="foodName"
-          placeholder="Food Name">
-
-        <input
-          type="number"
-          id="foodPrice"
-          placeholder="Price ₹">
-
-        <input
-          type="text"
-          id="foodCategory"
-          placeholder="Category">
-
-        <input
-          type="text"
-          id="foodImage"
-          placeholder="Food Image URL">
-
-        <button class="add" onclick="addFood()">
-          + Add Food
-        </button>
-
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Food</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-
-        <tbody id="foodTable"></tbody>
-      </table>
-
-    </section>
-
-    <!-- ORDERS -->
-    <section class="section">
-
-      <h2>📦 Orders Management</h2>
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>Customer</th>
-            <th>Amount</th>
-            <th>Payment</th>
-            <th>Status</th>
-            <th>Update</th>
-          </tr>
-        </thead>
-
-        <tbody id="ordersTable">
-
-          <tr>
-            <td>#GR1001</td>
-            <td>Demo Customer</td>
-            <td>₹350</td>
-            <td>UPI</td>
-
-            <td>
-              <span class="status">Preparing</span>
-            </td>
-
-            <td>
-              <select onchange="changeStatus(this)">
-                <option>Pending</option>
-                <option>Accepted</option>
-                <option selected>Preparing</option>
-                <option>Ready</option>
-                <option>Delivered</option>
-                <option>Cancelled</option>
-              </select>
-            </td>
-
-          </tr>
-
-        </tbody>
-
-      </table>
-
-    </section>
-
-    <!-- PAYMENT -->
-    <section class="section">
-
-      <h2>💳 Online Payment / UPI</h2>
-
-      <div class="form">
-
-        <input
-          type="text"
-          id="upiId"
-          placeholder="Restaurant UPI ID">
-
-        <input
-          type="text"
-          id="upiName"
-          placeholder="UPI Name">
-
-        <button class="update" onclick="saveUPI()">
-          Save UPI Details
-        </button>
-
-      </div>
-
-      <p id="upiMessage" style="margin-top:15px;"></p>
-
-    </section>
-
-    <!-- CUSTOMERS -->
-    <section class="section">
-
-      <h2>👤 Customers</h2>
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>Orders</th>
-          </tr>
-        </thead>
-
-        <tbody>
-
-          <tr>
-            <td>Demo Customer</td>
-            <td>XXXXXXXXXX</td>
-            <td>1</td>
-          </tr>
-
-        </tbody>
-
-      </table>
-
-    </section>
-
-    <!-- RESTAURANT SETTINGS -->
-    <section class="section">
-
-      <h2>⚙️ Restaurant Settings</h2>
-
-      <div class="form">
-
-        <input
-          type="text"
-          id="restaurantName"
-          value="Gloria Restaurant"
-          placeholder="Restaurant Name">
-
-        <input
-          type="text"
-          id="restaurantPhone"
-          placeholder="Phone Number">
-
-        <input
-          type="text"
-          id="restaurantAddress"
-          placeholder="Restaurant Address">
-
-        <button class="add" onclick="saveSettings()">
-          Save Settings
-        </button>
-
-      </div>
-
-      <p id="settingsMessage" style="margin-top:15px;"></p>
-
-    </section>
-
-  </main>
+  <!-- FIREBASE -->
 
   <script>
 
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyBEmJ1LRLctWqlMbf74Omxa0Uq7nX6jgk",
+
+      authDomain: "gloria-restaurant-admine-panel.firebaseapp.com",
+
+      databaseURL: "https://gloria-restaurant-admine-panel-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+      projectId: "gloria-restaurant-admine-panel",
+
+      storageBucket: "gloria-restaurant-admine-panel.firebasestorage.app",
+
+      messagingSenderId: "372532145352",
+
+      appId: "1:372532145352:web:509be55fb29da2a06c49fd"
+
+    };
+
+
+    firebase.initializeApp(firebaseConfig);
+
+    const database = firebase.database();
+
+  </script>
+
+
+  <style>
+
+    * {
+
+      box-sizing: border-box;
+
+      margin: 0;
+
+      padding: 0;
+
+      font-family: Arial, sans-serif;
+
+    }
+
+
+    body {
+
+      background: #f5f6fa;
+
+      color: #222;
+
+    }
+
+
+    .header {
+
+      background: #111827;
+
+      color: white;
+
+      padding: 18px 25px;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+    }
+
+
+    .header h1 {
+
+      font-size: 22px;
+
+    }
+
+
+    .logout {
+
+      background: #ef4444;
+
+      color: white;
+
+      border: none;
+
+      padding: 10px 16px;
+
+      border-radius: 7px;
+
+      cursor: pointer;
+
+    }
+
+
+    .container {
+
+      padding: 25px;
+
+      max-width: 1300px;
+
+      margin: auto;
+
+    }
+
+
+    .cards {
+
+      display: grid;
+
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+      gap: 18px;
+
+      margin-bottom: 30px;
+
+    }
+
+
+    .card {
+
+      background: white;
+
+      padding: 22px;
+
+      border-radius: 12px;
+
+      box-shadow: 0 2px 10px rgba(0,0,0,.08);
+
+    }
+
+
+    .card h3 {
+
+      color: #666;
+
+      font-size: 14px;
+
+      margin-bottom: 10px;
+
+    }
+
+
+    .card p {
+
+      font-size: 28px;
+
+      font-weight: bold;
+
+    }
+
+
+    .section {
+
+      background: white;
+
+      padding: 22px;
+
+      border-radius: 12px;
+
+      margin-bottom: 25px;
+
+      box-shadow: 0 2px 10px rgba(0,0,0,.08);
+
+    }
+
+
+    .section h2 {
+
+      margin-bottom: 18px;
+
+    }
+
+
+    .form {
+
+      display: grid;
+
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+      gap: 12px;
+
+    }
+
+
+    input,
+
+    select {
+
+      padding: 12px;
+
+      border: 1px solid #ddd;
+
+      border-radius: 7px;
+
+      width: 100%;
+
+    }
+
+
+    button {
+
+      border: none;
+
+      padding: 11px 16px;
+
+      border-radius: 7px;
+
+      cursor: pointer;
+
+    }
+
+
+    .add {
+
+      background: #16a34a;
+
+      color: white;
+
+    }
+
+
+    table {
+
+      width: 100%;
+
+      border-collapse: collapse;
+
+      margin-top: 15px;
+
+    }
+
+
+    th,
+
+    td {
+
+      padding: 13px;
+
+      border-bottom: 1px solid #eee;
+
+      text-align: left;
+
+    }
+
+
+    th {
+
+      background: #f3f4f6;
+
+    }
+
+
+    .status {
+
+      padding: 6px 9px;
+
+      border-radius: 5px;
+
+      background: #fef3c7;
+
+      color: #92400e;
+
+    }
+
+
+    .delete {
+
+      background: #dc2626;
+
+      color: white;
+
+    }
+
+
+    .update {
+
+      background: #2563eb;
+
+      color: white;
+
+    }
+
+
+    .food-image {
+
+      width: 60px;
+
+      height: 60px;
+
+      object-fit: cover;
+
+      border-radius: 8px;
+
+      display: block;
+
+      margin-bottom: 6px;
+
+    }
+
+
+    .empty {
+
+      color: #777;
+
+      padding: 15px 0;
+
+    }
+
+
+    @media(max-width:700px) {
+
+      .container {
+
+        padding: 15px;
+
+      }
+
+
+      table {
+
+        display: block;
+
+        overflow-x: auto;
+
+        white-space: nowrap;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- HEADER -->
+
+  <header class="header">
+
+    <h1>🍽️ Gloria Restaurant Admin</h1>
+
+    <button class="logout" onclick="logout()">
+
+      Logout
+
+    </button>
+
+  </header>
+
+
+  <main class="container">
+
+
+    <!-- DASHBOARD -->
+
+    <div class="cards">
+
+
+      <div class="card">
+
+        <h3>Total Orders</h3>
+
+        <p id="totalOrders">0</p>
+
+      </div>
+
+
+      <div class="card">
+
+        <h3>Total Sales</h3>
+
+        <p id="totalSales">₹0</p>
+
+      </div>
+
+
+      <div class="card">
+
+        <h3>Customers</h3>
+
+        <p id="totalCustomers">0</p>
+
+      </div>
+
+
+      <div class="card">
+
+        <h3>Food Items</h3>
+
+        <p id="totalItems">0</p>
+
+      </div>
+
+
+    </div>
+
+
+    <!-- FOOD MANAGEMENT -->
+
+    <section class="section">
+
+
+      <h2>🍔 Food Items Management</h2>
+
+
+      <div class="form">
+
+
+        <input
+
+          type="text"
+
+          id="foodName"
+
+          placeholder="Food Name">
+
+
+        <input
+
+          type="number"
+
+          id="foodPrice"
+
+          placeholder="Price ₹">
+
+
+        <input
+
+          type="text"
+
+          id="foodCategory"
+
+          placeholder="Category">
+
+
+        <input
+
+          type="text"
+
+          id="foodImage"
+
+          placeholder="Food Image URL">
+
+
+        <button
+
+          class="add"
+
+          onclick="addFood()">
+
+          + Add Food
+
+        </button>
+
+
+      </div>
+
+
+      <table>
+
+
+        <thead>
+
+          <tr>
+
+            <th>Food</th>
+
+            <th>Category</th>
+
+            <th>Price</th>
+
+            <th>Action</th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody id="foodTable"></tbody>
+
+
+      </table>
+
+
+    </section>
+
+
+    <!-- ORDERS -->
+
+    <section class="section">
+
+
+      <h2>📦 Orders Management</h2>
+
+
+      <table>
+
+
+        <thead>
+
+          <tr>
+
+            <th>Order ID</th>
+
+            <th>Customer</th>
+
+            <th>Amount</th>
+
+            <th>Payment</th>
+
+            <th>Status</th>
+
+            <th>Update</th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody id="ordersTable">
+
+
+          <tr>
+
+            <td>#GR1001</td>
+
+            <td>Demo Customer</td>
+
+            <td>₹350</td>
+
+            <td>UPI</td>
+
+
+            <td>
+
+              <span class="status">
+
+                Preparing
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <select onchange="changeStatus(this)">
+
+                <option>Pending</option>
+
+                <option>Accepted</option>
+
+                <option selected>Preparing</option>
+
+                <option>Ready</option>
+
+                <option>Delivered</option>
+
+                <option>Cancelled</option>
+
+              </select>
+
+            </td>
+
+
+          </tr>
+
+
+        </tbody>
+
+
+      </table>
+
+
+    </section>
+
+
+    <!-- PAYMENT -->
+
+    <section class="section">
+
+
+      <h2>💳 Online Payment / UPI</h2>
+
+
+      <div class="form">
+
+
+        <input
+
+          type="text"
+
+          id="upiId"
+
+          placeholder="Restaurant UPI ID">
+
+
+        <input
+
+          type="text"
+
+          id="upiName"
+
+          placeholder="UPI Name">
+
+
+        <button
+
+          class="update"
+
+          onclick="saveUPI()">
+
+          Save UPI Details
+
+        </button>
+
+
+      </div>
+
+
+      <p
+
+        id="upiMessage"
+
+        style="margin-top:15px;">
+
+      </p>
+
+
+    </section>
+
+
+    <!-- CUSTOMERS -->
+
+    <section class="section">
+
+
+      <h2>👤 Customers</h2>
+
+
+      <table>
+
+
+        <thead>
+
+          <tr>
+
+            <th>Name</th>
+
+            <th>Phone</th>
+
+            <th>Orders</th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+          <tr>
+
+            <td>Demo Customer</td>
+
+            <td>XXXXXXXXXX</td>
+
+            <td>1</td>
+
+          </tr>
+
+
+        </tbody>
+
+
+      </table>
+
+
+    </section>
+
+
+    <!-- RESTAURANT SETTINGS -->
+
+    <section class="section">
+
+
+      <h2>⚙️ Restaurant Settings</h2>
+
+
+      <div class="form">
+
+
+        <input
+
+          type="text"
+
+          id="restaurantName"
+
+          value="Gloria Restaurant"
+
+          placeholder="Restaurant Name">
+
+
+        <input
+
+          type="text"
+
+          id="restaurantPhone"
+
+          placeholder="Phone Number">
+
+
+        <input
+
+          type="text"
+
+          id="restaurantAddress"
+
+          placeholder="Restaurant Address">
+
+
+        <button
+
+          class="add"
+
+          onclick="saveSettings()">
+
+          Save Settings
+
+        </button>
+
+
+      </div>
+
+
+      <p
+
+        id="settingsMessage"
+
+        style="margin-top:15px;">
+
+      </p>
+
+
+    </section>
+
+
+  </main>
+
+
+  <!-- JAVASCRIPT -->
+
+  <script>
+
+
     let foods = [];
+
+
+    // =========================
+
+    // LOAD FOODS FROM FIREBASE
+
+    // =========================
+
+
+    function loadFoods() {
+
+
+      database.ref("foods").on("value", function(snapshot) {
+
+
+        foods = [];
+
+
+        snapshot.forEach(function(childSnapshot) {
+
+
+          const food = childSnapshot.val();
+
+
+          food.firebaseKey = childSnapshot.key;
+
+
+          foods.push(food);
+
+
+        });
+
+
+        displayFoods();
+
+
+      });
+
+
+    }
+
+
+
+    // =========================
+
+    // ADD FOOD
+
+    // =========================
+
 
     function addFood() {
 
+
       const name =
-        document.getElementById("foodName").value;
+
+        document.getElementById("foodName").value.trim();
+
 
       const price =
-        document.getElementById("foodPrice").value;
+
+        document.getElementById("foodPrice").value.trim();
+
 
       const category =
-        document.getElementById("foodCategory").value;
+
+        document.getElementById("foodCategory").value.trim();
+
 
       const image =
-        document.getElementById("foodImage").value;
+
+        document.getElementById("foodImage").value.trim();
+
+
 
       if (!name || !price || !category) {
-        alert("Please fill Food Name, Price and Category.");
+
+
+        alert(
+
+          "Please fill Food Name, Price and Category."
+
+        );
+
+
         return;
+
       }
 
-      foods.push({
+
+
+      const foodData = {
+
+
         name: name,
-        price: price,
+
+        price: Number(price),
+
         category: category,
-        image: image
-      });
 
-      document.getElementById("foodName").value = "";
-      document.getElementById("foodPrice").value = "";
-      document.getElementById("foodCategory").value = "";
-      document.getElementById("foodImage").value = "";
+        image: image,
 
-      displayFoods();
+        createdAt: Date.now()
+
+
+      };
+
+
+
+      database
+
+        .ref("foods")
+
+        .push(foodData)
+
+
+        .then(function() {
+
+
+          alert(
+
+            "Food item added successfully!"
+
+          );
+
+
+          document.getElementById("foodName").value = "";
+
+          document.getElementById("foodPrice").value = "";
+
+          document.getElementById("foodCategory").value = "";
+
+          document.getElementById("foodImage").value = "";
+
+
+        })
+
+
+        .catch(function(error) {
+
+
+          alert(
+
+            "Error: " + error.message
+
+          );
+
+
+        });
+
+
     }
+
+
+
+    // =========================
+
+    // DISPLAY FOODS
+
+    // =========================
 
 
     function displayFoods() {
 
+
       const table =
+
         document.getElementById("foodTable");
+
 
       table.innerHTML = "";
 
-      foods.forEach((food, index) => {
 
-        table.innerHTML += `
+
+      if (foods.length === 0) {
+
+
+        table.innerHTML = `
+
           <tr>
 
-            <td>${food.name}</td>
+            <td
 
-            <td>${food.category}</td>
+              colspan="4"
 
-            <td>₹${food.price}</td>
+              class="empty">
 
-            <td>
-              <button
-                class="delete"
-                onclick="deleteFood(${index})">
-                Delete
-              </button>
+              No food items added yet.
+
             </td>
 
           </tr>
+
         `;
 
-      });
-
-      document.getElementById("totalItems").innerText =
-        foods.length;
-    }
-
-
-    function deleteFood(index) {
-
-      if (confirm("Delete this food item?")) {
-
-        foods.splice(index, 1);
-
-        displayFoods();
 
       }
 
+
+
+      foods.forEach(function(food) {
+
+
+        const imageHTML = food.image
+
+          ? `
+
+            <img
+
+              src="${escapeHTML(food.image)}"
+
+              class="food-image"
+
+              onerror="this.style.display='none';"
+
+            >
+
+          `
+
+          : "";
+
+
+
+        table.innerHTML += `
+
+          <tr>
+
+
+            <td>
+
+              ${imageHTML}
+
+              ${escapeHTML(food.name)}
+
+            </td>
+
+
+            <td>
+
+              ${escapeHTML(food.category)}
+
+            </td>
+
+
+            <td>
+
+              ₹${food.price}
+
+            </td>
+
+
+            <td>
+
+
+              <button
+
+                class="delete"
+
+                onclick="deleteFood('${food.firebaseKey}')">
+
+
+                Delete
+
+
+              </button>
+
+
+            </td>
+
+
+          </tr>
+
+        `;
+
+
+      });
+
+
+
+      document.getElementById("totalItems").innerText =
+
+        foods.length;
+
+
     }
 
 
-    function changeStatus(select) {
 
-      const status =
-        select.value;
+    // =========================
 
-      select.parentElement
-        .parentElement
-        .querySelector(".status")
-        .innerText = status;
+    // DELETE FOOD
 
-    }
+    // =========================
 
 
-    function saveUPI() {
+    function deleteFood(firebaseKey) {
 
-      const upi =
-        document.getElementById("upiId").value;
 
-      const name =
-        document.getElementById("upiName").value;
-
-      if (!upi || !name) {
-
-        alert("Please enter UPI details.");
+      if (!confirm("Delete this food item?")) {
 
         return;
 
       }
 
-      document.getElementById("upiMessage").innerText =
-        "UPI details saved successfully.";
+
+
+      database
+
+        .ref("foods/" + firebaseKey)
+
+        .remove()
+
+
+        .then(function() {
+
+
+          alert(
+
+            "Food item deleted successfully."
+
+          );
+
+
+        })
+
+
+        .catch(function(error) {
+
+
+          alert(
+
+            "Error: " + error.message
+
+          );
+
+
+        });
+
 
     }
+
+
+
+    // =========================
+
+    // ESCAPE HTML
+
+    // =========================
+
+
+    function escapeHTML(text) {
+
+
+      if (
+
+        text === undefined ||
+
+        text === null
+
+      ) {
+
+        return "";
+
+      }
+
+
+
+      return String(text)
+
+        .replace(/&/g, "&amp;")
+
+        .replace(/</g, "&lt;")
+
+        .replace(/>/g, "&gt;")
+
+        .replace(/"/g, "&quot;")
+
+        .replace(/'/g, "&#039;");
+
+
+    }
+
+
+
+    // =========================
+
+    // ORDER STATUS
+
+    // =========================
+
+
+    function changeStatus(select) {
+
+
+      const status = select.value;
+
+
+      select.parentElement
+
+        .parentElement
+
+        .querySelector(".status")
+
+        .innerText = status;
+
+
+    }
+
+
+
+    // =========================
+
+    // SAVE UPI
+
+    // =========================
+
+
+    function saveUPI() {
+
+
+      const upi =
+
+        document.getElementById("upiId").value.trim();
+
+
+      const name =
+
+        document.getElementById("upiName").value.trim();
+
+
+
+      if (!upi || !name) {
+
+
+        alert(
+
+          "Please enter UPI details."
+
+        );
+
+
+        return;
+
+      }
+
+
+
+      database
+
+        .ref("settings/payment")
+
+        .set({
+
+          upiId: upi,
+
+          upiName: name
+
+        })
+
+
+        .then(function() {
+
+
+          document.getElementById("upiMessage").innerText =
+
+            "UPI details saved successfully.";
+
+
+        })
+
+
+        .catch(function(error) {
+
+
+          document.getElementById("upiMessage").innerText =
+
+            "Error: " + error.message;
+
+
+        });
+
+
+    }
+
+
+
+    // =========================
+
+    // SAVE RESTAURANT SETTINGS
+
+    // =========================
 
 
     function saveSettings() {
 
-      document.getElementById("settingsMessage").innerText =
-        "Restaurant settings saved successfully.";
+
+      const restaurantName =
+
+        document.getElementById("restaurantName").value.trim();
+
+
+      const restaurantPhone =
+
+        document.getElementById("restaurantPhone").value.trim();
+
+
+      const restaurantAddress =
+
+        document.getElementById("restaurantAddress").value.trim();
+
+
+
+      database
+
+        .ref("settings/restaurant")
+
+        .set({
+
+          name: restaurantName,
+
+          phone: restaurantPhone,
+
+          address: restaurantAddress
+
+        })
+
+
+        .then(function() {
+
+
+          document.getElementById("settingsMessage").innerText =
+
+            "Restaurant settings saved successfully.";
+
+
+        })
+
+
+        .catch(function(error) {
+
+
+          document.getElementById("settingsMessage").innerText =
+
+            "Error: " + error.message;
+
+
+        });
+
 
     }
+
+
+
+    // =========================
+
+    // LOGOUT
+
+    // =========================
 
 
     function logout() {
 
-      if (confirm("Are you sure you want to logout?")) {
+
+      if (
+
+        confirm(
+
+          "Are you sure you want to logout?"
+
+        )
+
+      ) {
+
 
         alert("Logged out.");
 
+
       }
+
 
     }
 
+
+
+    // =========================
+
+    // START
+
+    // =========================
+
+
+    loadFoods();
+
+
   </script>
 
+
 </body>
+
 </html>
