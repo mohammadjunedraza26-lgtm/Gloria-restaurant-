@@ -118,6 +118,16 @@
       color: white;
     }
 
+    .delete {
+      background: #dc2626;
+      color: white;
+    }
+
+    .update {
+      background: #2563eb;
+      color: white;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -140,16 +150,6 @@
       border-radius: 5px;
       background: #fef3c7;
       color: #92400e;
-    }
-
-    .delete {
-      background: #dc2626;
-      color: white;
-    }
-
-    .update {
-      background: #2563eb;
-      color: white;
     }
 
     .food-image {
@@ -468,23 +468,28 @@
         <button
           class="add"
           onclick="saveSettings()">
-          <input
-  type="number"
-  id="restaurantLatitude"
-  placeholder="Latitude">
-
-<input
-  type="number"
-  id="restaurantLongitude"
-  placeholder="Longitude">
-
-<button
-  class="update"
-  onclick="saveLocation()">
-  📍 Save Location
-</button>
 
           Save Settings
+
+        </button>
+
+        <input
+          type="number"
+          step="any"
+          id="restaurantLatitude"
+          placeholder="Latitude">
+
+        <input
+          type="number"
+          step="any"
+          id="restaurantLongitude"
+          placeholder="Longitude">
+
+        <button
+          class="update"
+          onclick="saveLocation()">
+
+          📍 Save Location
 
         </button>
 
@@ -499,6 +504,7 @@
 
 
   <script>
+
 
     // ==========================================
     // FIREBASE CONFIGURATION
@@ -849,7 +855,9 @@
 
           upiId: upi,
 
-          upiName: name
+          upiName: name,
+
+          updatedAt: Date.now()
 
         })
 
@@ -922,36 +930,6 @@
     // ==========================================
 
     function saveSettings() {
-      function saveLocation() {
-
-  const latitude =
-    document.getElementById("restaurantLatitude").value.trim();
-
-  const longitude =
-    document.getElementById("restaurantLongitude").value.trim();
-
-  if (!latitude || !longitude) {
-    alert("Please enter Latitude and Longitude.");
-    return;
-  }
-
-  database
-    .ref("settings/location")
-    .set({
-      latitude: Number(latitude),
-      longitude: Number(longitude),
-      updatedAt: Date.now()
-    })
-
-    .then(function() {
-      alert("✅ Restaurant location saved successfully.");
-    })
-
-    .catch(function(error) {
-      alert("❌ Location save error: " + error.message);
-      console.error("Location save error:", error);
-    });
-      }
 
       const restaurantName =
         document
@@ -1046,6 +1024,119 @@
 
 
     // ==========================================
+    // SAVE RESTAURANT LOCATION
+    // ==========================================
+
+    function saveLocation() {
+
+      const latitude =
+        document
+          .getElementById("restaurantLatitude")
+          .value
+          .trim();
+
+      const longitude =
+        document
+          .getElementById("restaurantLongitude")
+          .value
+          .trim();
+
+
+      if (!latitude || !longitude) {
+
+        alert(
+          "Please enter Latitude and Longitude."
+        );
+
+        return;
+
+      }
+
+
+      const latNumber = Number(latitude);
+      const lngNumber = Number(longitude);
+
+
+      if (
+        !Number.isFinite(latNumber) ||
+        !Number.isFinite(lngNumber)
+      ) {
+
+        alert(
+          "Please enter valid Latitude and Longitude."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        latNumber < -90 ||
+        latNumber > 90
+      ) {
+
+        alert(
+          "Latitude must be between -90 and 90."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        lngNumber < -180 ||
+        lngNumber > 180
+      ) {
+
+        alert(
+          "Longitude must be between -180 and 180."
+        );
+
+        return;
+
+      }
+
+
+      database
+        .ref("settings/location")
+        .set({
+
+          latitude: latNumber,
+
+          longitude: lngNumber,
+
+          updatedAt: Date.now()
+
+        })
+
+        .then(function() {
+
+          alert(
+            "✅ Restaurant location saved successfully."
+          );
+
+        })
+
+        .catch(function(error) {
+
+          alert(
+            "❌ Location save error: " +
+            error.message
+          );
+
+          console.error(
+            "Location save error:",
+            error
+          );
+
+        });
+
+    }
+
+
+    // ==========================================
     // LOAD RESTAURANT SETTINGS
     // ==========================================
 
@@ -1063,16 +1154,25 @@
           }
 
 
-          document.getElementById("restaurantName").value =
-            settings.name || "Gloria Restaurant";
+          document
+            .getElementById("restaurantName")
+            .value =
+            settings.name ||
+            "Gloria Restaurant";
 
 
-          document.getElementById("restaurantPhone").value =
-            settings.phone || "";
+          document
+            .getElementById("restaurantPhone")
+            .value =
+            settings.phone ||
+            "";
 
 
-          document.getElementById("restaurantAddress").value =
-            settings.address || "";
+          document
+            .getElementById("restaurantAddress")
+            .value =
+            settings.address ||
+            "";
 
 
         }, function(error) {
@@ -1083,52 +1183,9 @@
           );
 
           const message =
-            document.getElementById("settingsMessage");
+            document.getElementById(
+              "settingsMessage"
+            );
 
           message.innerText =
-            "❌ Settings load error: " + error.message;
-
-          message.className =
-            "message error";
-
-        });
-
-    }
-
-
-    // ==========================================
-    // LOGOUT
-    // ==========================================
-
-    function logout() {
-
-      if (
-        confirm(
-          "Are you sure you want to logout?"
-        )
-      ) {
-
-        alert("Logged out.");
-
-      }
-
-    }
-
-
-    // ==========================================
-    // START APPLICATION
-    // ==========================================
-
-    loadFoods();
-
-    loadSettings();
-
-    loadUPI();
-
-
-  </script>
-
-
-</body>
-
-  </html>
+            "❌ Settin
