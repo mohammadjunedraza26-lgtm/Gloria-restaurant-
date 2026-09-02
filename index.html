@@ -13,6 +13,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
+
   <style>
 
     * {
@@ -128,6 +129,38 @@
       color: white;
     }
 
+    .activate {
+      background: #16a34a;
+      color: white;
+      margin-right: 5px;
+    }
+
+    .deactivate {
+      background: #f59e0b;
+      color: white;
+      margin-right: 5px;
+    }
+
+    .active-badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 5px;
+      background: #dcfce7;
+      color: #166534;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .inactive-badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 5px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -179,6 +212,12 @@
       color: #dc2626;
     }
 
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
     @media(max-width:700px) {
 
       .container {
@@ -215,8 +254,12 @@
 
     <h1>🍽️ Gloria Restaurant Admin</h1>
 
-    <button class="logout" onclick="logout()">
+    <button
+      class="logout"
+      onclick="logout()">
+
       Logout
+
     </button>
 
   </header>
@@ -230,26 +273,42 @@
     <div class="cards">
 
       <div class="card">
+
         <h3>Total Orders</h3>
+
         <p id="totalOrders">0</p>
+
       </div>
 
+
       <div class="card">
+
         <h3>Total Sales</h3>
+
         <p id="totalSales">₹0</p>
+
       </div>
 
+
       <div class="card">
+
         <h3>Customers</h3>
+
         <p id="totalCustomers">0</p>
+
       </div>
 
+
       <div class="card">
+
         <h3>Food Items</h3>
+
         <p id="totalItems">0</p>
+
       </div>
 
     </div>
+
 
 
     <!-- FOOD MANAGEMENT -->
@@ -258,6 +317,7 @@
 
       <h2>🍔 Food Items Management</h2>
 
+
       <div class="form">
 
         <input
@@ -265,20 +325,24 @@
           id="foodName"
           placeholder="Food Name">
 
+
         <input
           type="number"
           id="foodPrice"
           placeholder="Price ₹">
+
 
         <input
           type="text"
           id="foodCategory"
           placeholder="Category">
 
+
         <input
           type="text"
           id="foodImage"
           placeholder="Food Image URL">
+
 
         <button
           class="add"
@@ -291,18 +355,27 @@
       </div>
 
 
+
       <table>
 
         <thead>
 
           <tr>
+
             <th>Food</th>
+
             <th>Category</th>
+
             <th>Price</th>
+
+            <th>Status</th>
+
             <th>Action</th>
+
           </tr>
 
         </thead>
+
 
         <tbody id="foodTable"></tbody>
 
@@ -311,23 +384,32 @@
     </section>
 
 
+
     <!-- ORDERS -->
 
     <section class="section">
 
       <h2>📦 Orders Management</h2>
 
+
       <table>
 
         <thead>
 
           <tr>
+
             <th>Order ID</th>
+
             <th>Customer</th>
+
             <th>Amount</th>
+
             <th>Payment</th>
+
             <th>Status</th>
+
             <th>Update</th>
+
           </tr>
 
         </thead>
@@ -346,9 +428,13 @@
             <td>UPI</td>
 
             <td>
+
               <span class="status">
+
                 Preparing
+
               </span>
+
             </td>
 
             <td>
@@ -356,10 +442,15 @@
               <select onchange="changeStatus(this)">
 
                 <option>Pending</option>
+
                 <option>Accepted</option>
+
                 <option selected>Preparing</option>
+
                 <option>Ready</option>
+
                 <option>Delivered</option>
+
                 <option>Cancelled</option>
 
               </select>
@@ -375,11 +466,13 @@
     </section>
 
 
+
     <!-- PAYMENT -->
 
     <section class="section">
 
       <h2>💳 Online Payment / UPI</h2>
+
 
       <div class="form">
 
@@ -388,10 +481,12 @@
           id="upiId"
           placeholder="Restaurant UPI ID">
 
+
         <input
           type="text"
           id="upiName"
           placeholder="UPI Name">
+
 
         <button
           class="update"
@@ -403,9 +498,15 @@
 
       </div>
 
-      <p id="upiMessage" class="message"></p>
+
+      <p
+        id="upiMessage"
+        class="message">
+
+      </p>
 
     </section>
+
 
 
     <!-- CUSTOMERS -->
@@ -414,24 +515,34 @@
 
       <h2>👤 Customers</h2>
 
+
       <table>
 
         <thead>
 
           <tr>
+
             <th>Name</th>
+
             <th>Phone</th>
+
             <th>Orders</th>
+
           </tr>
 
         </thead>
 
+
         <tbody>
 
           <tr>
+
             <td>Demo Customer</td>
+
             <td>XXXXXXXXXX</td>
+
             <td>1</td>
+
           </tr>
 
         </tbody>
@@ -441,11 +552,13 @@
     </section>
 
 
+
     <!-- RESTAURANT SETTINGS -->
 
     <section class="section">
 
       <h2>⚙️ Restaurant Settings</h2>
+
 
       <div class="form">
 
@@ -455,15 +568,18 @@
           value="Gloria Restaurant"
           placeholder="Restaurant Name">
 
+
         <input
           type="text"
           id="restaurantPhone"
           placeholder="Phone Number">
 
+
         <input
           type="text"
           id="restaurantAddress"
           placeholder="Restaurant Address">
+
 
         <button
           class="add"
@@ -473,17 +589,20 @@
 
         </button>
 
+
         <input
           type="number"
           step="any"
           id="restaurantLatitude"
           placeholder="Latitude">
 
+
         <input
           type="number"
           step="any"
           id="restaurantLongitude"
           placeholder="Longitude">
+
 
         <button
           class="update"
@@ -495,12 +614,18 @@
 
       </div>
 
-      <p id="settingsMessage" class="message"></p>
+
+      <p
+        id="settingsMessage"
+        class="message">
+
+      </p>
 
     </section>
 
 
   </main>
+
 
 
   <script>
@@ -557,31 +682,57 @@
 
     function loadFoods() {
 
-      database.ref("foods").on("value", function(snapshot) {
+      database.ref("foods").on(
 
-        foods = [];
+        "value",
 
-        snapshot.forEach(function(childSnapshot) {
+        function(snapshot) {
 
-          const food = childSnapshot.val();
+          foods = [];
 
-          food.firebaseKey = childSnapshot.key;
 
-          foods.push(food);
+          snapshot.forEach(
 
-        });
+            function(childSnapshot) {
 
-        displayFoods();
+              const food =
+                childSnapshot.val();
 
-      }, function(error) {
 
-        console.error("Food loading error:", error);
+              food.firebaseKey =
+                childSnapshot.key;
 
-        alert("Food data load error: " + error.message);
 
-      });
+              foods.push(food);
+
+            }
+
+          );
+
+
+          displayFoods();
+
+        },
+
+        function(error) {
+
+          console.error(
+            "Food loading error:",
+            error
+          );
+
+
+          alert(
+            "Food data load error: " +
+            error.message
+          );
+
+        }
+
+      );
 
     }
+
 
 
     // ==========================================
@@ -591,19 +742,39 @@
     function addFood() {
 
       const name =
-        document.getElementById("foodName").value.trim();
+        document
+          .getElementById("foodName")
+          .value
+          .trim();
+
 
       const price =
-        document.getElementById("foodPrice").value.trim();
+        document
+          .getElementById("foodPrice")
+          .value
+          .trim();
+
 
       const category =
-        document.getElementById("foodCategory").value.trim();
+        document
+          .getElementById("foodCategory")
+          .value
+          .trim();
+
 
       const image =
-        document.getElementById("foodImage").value.trim();
+        document
+          .getElementById("foodImage")
+          .value
+          .trim();
 
 
-      if (!name || !price || !category) {
+
+      if (
+        !name ||
+        !price ||
+        !category
+      ) {
 
         alert(
           "Please fill Food Name, Price and Category."
@@ -612,6 +783,7 @@
         return;
 
       }
+
 
 
       const foodData = {
@@ -624,36 +796,59 @@
 
         image: image,
 
+        active: true,
+
         createdAt: Date.now()
 
       };
+
 
 
       database
         .ref("foods")
         .push(foodData)
 
+
         .then(function() {
 
-          alert("Food item added successfully!");
+          alert(
+            "Food item added successfully!"
+          );
 
-          document.getElementById("foodName").value = "";
 
-          document.getElementById("foodPrice").value = "";
+          document
+            .getElementById("foodName")
+            .value = "";
 
-          document.getElementById("foodCategory").value = "";
 
-          document.getElementById("foodImage").value = "";
+          document
+            .getElementById("foodPrice")
+            .value = "";
+
+
+          document
+            .getElementById("foodCategory")
+            .value = "";
+
+
+          document
+            .getElementById("foodImage")
+            .value = "";
 
         })
 
+
         .catch(function(error) {
 
-          alert("Error: " + error.message);
+          alert(
+            "Error: " +
+            error.message
+          );
 
         });
 
     }
+
 
 
     // ==========================================
@@ -663,9 +858,13 @@
     function displayFoods() {
 
       const table =
-        document.getElementById("foodTable");
+        document.getElementById(
+          "foodTable"
+        );
+
 
       table.innerHTML = "";
+
 
 
       if (foods.length === 0) {
@@ -674,7 +873,9 @@
 
           <tr>
 
-            <td colspan="4" class="empty">
+            <td
+              colspan="5"
+              class="empty">
 
               No food items added yet.
 
@@ -687,20 +888,92 @@
       }
 
 
+
       foods.forEach(function(food) {
 
-        const imageHTML = food.image
 
-          ? `
+        // Old food items without active field
+        // will be treated as ACTIVE.
 
-            <img
-              src="${escapeHTML(food.image)}"
-              class="food-image"
-              onerror="this.style.display='none';">
+        const isActive =
+          food.active !== false;
 
-          `
 
-          : "";
+
+        const imageHTML =
+          food.image
+
+            ? `
+
+              <img
+                src="${escapeHTML(food.image)}"
+                class="food-image"
+                onerror="this.style.display='none';">
+
+            `
+
+            : "";
+
+
+
+        const statusHTML =
+          isActive
+
+            ? `
+
+              <span class="active-badge">
+
+                🟢 Active
+
+              </span>
+
+            `
+
+            : `
+
+              <span class="inactive-badge">
+
+                🔴 Inactive
+
+              </span>
+
+            `;
+
+
+
+        const toggleButton =
+          isActive
+
+            ? `
+
+              <button
+                class="deactivate"
+                onclick="toggleFoodStatus(
+                  '${food.firebaseKey}',
+                  false
+                )">
+
+                🔴 Deactivate
+
+              </button>
+
+            `
+
+            : `
+
+              <button
+                class="activate"
+                onclick="toggleFoodStatus(
+                  '${food.firebaseKey}',
+                  true
+                )">
+
+                🟢 Activate
+
+              </button>
+
+            `;
+
 
 
         table.innerHTML += `
@@ -715,23 +988,45 @@
 
             </td>
 
+
             <td>
+
               ${escapeHTML(food.category)}
+
             </td>
 
+
             <td>
+
               ₹${escapeHTML(food.price)}
+
             </td>
+
 
             <td>
 
-              <button
-                class="delete"
-                onclick="deleteFood('${food.firebaseKey}')">
+              ${statusHTML}
 
-                Delete
+            </td>
 
-              </button>
+
+            <td>
+
+              <div class="action-buttons">
+
+                ${toggleButton}
+
+                <button
+                  class="delete"
+                  onclick="deleteFood(
+                    '${food.firebaseKey}'
+                  )">
+
+                  Delete
+
+                </button>
+
+              </div>
 
             </td>
 
@@ -742,26 +1037,114 @@
       });
 
 
-      document.getElementById("totalItems").innerText =
+
+      document
+        .getElementById("totalItems")
+        .innerText =
         foods.length;
 
     }
+
+
+
+    // ==========================================
+    // ACTIVATE / DEACTIVATE FOOD
+    // ==========================================
+
+    function toggleFoodStatus(
+      firebaseKey,
+      newStatus
+    ) {
+
+
+      const statusText =
+        newStatus
+          ? "Activate"
+          : "Deactivate";
+
+
+
+      if (
+        !confirm(
+          statusText +
+          " this food item?"
+        )
+      ) {
+
+        return;
+
+      }
+
+
+
+      database
+        .ref(
+          "foods/" +
+          firebaseKey
+        )
+        .update({
+
+          active: newStatus
+
+        })
+
+
+        .then(function() {
+
+          alert(
+
+            newStatus
+
+              ? "🟢 Food item activated successfully."
+
+              : "🔴 Food item deactivated successfully."
+
+          );
+
+        })
+
+
+        .catch(function(error) {
+
+          alert(
+            "Error: " +
+            error.message
+          );
+
+        });
+
+    }
+
 
 
     // ==========================================
     // DELETE FOOD
     // ==========================================
 
-    function deleteFood(firebaseKey) {
+    function deleteFood(
+      firebaseKey
+    ) {
 
-      if (!confirm("Delete this food item?")) {
+
+      if (
+        !confirm(
+          "Delete this food item?"
+        )
+      ) {
+
         return;
+
       }
 
 
+
       database
-        .ref("foods/" + firebaseKey)
+        .ref(
+          "foods/" +
+          firebaseKey
+        )
         .remove()
+
 
         .then(function() {
 
@@ -771,15 +1154,18 @@
 
         })
 
+
         .catch(function(error) {
 
           alert(
-            "Error: " + error.message
+            "Error: " +
+            error.message
           );
 
         });
 
     }
+
 
 
     // ==========================================
@@ -798,15 +1184,36 @@
       }
 
 
+
       return String(text)
 
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+
+        .replace(
+          /</g,
+          "&lt;"
+        )
+
+        .replace(
+          />/g,
+          "&gt;"
+        )
+
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+
+        .replace(
+          /'/g,
+          "&#039;"
+        );
 
     }
+
 
 
     // ==========================================
@@ -815,14 +1222,21 @@
 
     function changeStatus(select) {
 
-      const status = select.value;
+      const status =
+        select.value;
+
+
 
       select.parentElement
         .parentElement
-        .querySelector(".status")
-        .innerText = status;
+        .querySelector(
+          ".status"
+        )
+        .innerText =
+        status;
 
     }
+
 
 
     // ==========================================
@@ -832,10 +1246,18 @@
     function saveUPI() {
 
       const upi =
-        document.getElementById("upiId").value.trim();
+        document
+          .getElementById("upiId")
+          .value
+          .trim();
+
 
       const name =
-        document.getElementById("upiName").value.trim();
+        document
+          .getElementById("upiName")
+          .value
+          .trim();
+
 
 
       if (!upi || !name) {
@@ -849,8 +1271,11 @@
       }
 
 
+
       database
-        .ref("settings/payment")
+        .ref(
+          "settings/payment"
+        )
         .set({
 
           upiId: upi,
@@ -861,26 +1286,37 @@
 
         })
 
+
         .then(function() {
 
           const message =
-            document.getElementById("upiMessage");
+            document.getElementById(
+              "upiMessage"
+            );
+
 
           message.innerText =
             "✅ UPI details saved successfully.";
+
 
           message.className =
             "message success";
 
         })
 
+
         .catch(function(error) {
 
           const message =
-            document.getElementById("upiMessage");
+            document.getElementById(
+              "upiMessage"
+            );
+
 
           message.innerText =
-            "❌ Error: " + error.message;
+            "❌ Error: " +
+            error.message;
+
 
           message.className =
             "message error";
@@ -888,6 +1324,7 @@
         });
 
     }
+
 
 
     // ==========================================
@@ -897,32 +1334,52 @@
     function loadUPI() {
 
       database
-        .ref("settings/payment")
-        .on("value", function(snapshot) {
+        .ref(
+          "settings/payment"
+        )
+        .on(
 
-          const data = snapshot.val();
+          "value",
 
-          if (!data) {
-            return;
+          function(snapshot) {
+
+            const data =
+              snapshot.val();
+
+
+            if (!data) {
+              return;
+            }
+
+
+
+            document
+              .getElementById("upiId")
+              .value =
+              data.upiId || "";
+
+
+            document
+              .getElementById("upiName")
+              .value =
+              data.upiName || "";
+
+          },
+
+
+          function(error) {
+
+            console.error(
+              "UPI load error:",
+              error
+            );
+
           }
 
-
-          document.getElementById("upiId").value =
-            data.upiId || "";
-
-          document.getElementById("upiName").value =
-            data.upiName || "";
-
-        }, function(error) {
-
-          console.error(
-            "UPI load error:",
-            error
-          );
-
-        });
+        );
 
     }
+
 
 
     // ==========================================
@@ -931,261 +1388,4 @@
 
     function saveSettings() {
 
-      const restaurantName =
-        document
-          .getElementById("restaurantName")
-          .value
-          .trim();
-
-      const restaurantPhone =
-        document
-          .getElementById("restaurantPhone")
-          .value
-          .trim();
-
-      const restaurantAddress =
-        document
-          .getElementById("restaurantAddress")
-          .value
-          .trim();
-
-
-      if (!restaurantName) {
-
-        alert(
-          "Please enter Restaurant Name."
-        );
-
-        return;
-
-      }
-
-
-      if (!restaurantAddress) {
-
-        alert(
-          "Please enter Restaurant Address."
-        );
-
-        return;
-
-      }
-
-
-      const settingsData = {
-
-        name: restaurantName,
-
-        phone: restaurantPhone,
-
-        address: restaurantAddress,
-
-        updatedAt: Date.now()
-
-      };
-
-
-      database
-        .ref("settings/restaurant")
-        .set(settingsData)
-
-        .then(function() {
-
-          const message =
-            document.getElementById("settingsMessage");
-
-          message.innerText =
-            "✅ Restaurant settings saved successfully.";
-
-          message.className =
-            "message success";
-
-        })
-
-        .catch(function(error) {
-
-          const message =
-            document.getElementById("settingsMessage");
-
-          message.innerText =
-            "❌ Error: " + error.message;
-
-          message.className =
-            "message error";
-
-          console.error(
-            "Settings save error:",
-            error
-          );
-
-        });
-
-    }
-
-
-    // ==========================================
-    // SAVE RESTAURANT LOCATION
-    // ==========================================
-
-    function saveLocation() {
-
-      const latitude =
-        document
-          .getElementById("restaurantLatitude")
-          .value
-          .trim();
-
-      const longitude =
-        document
-          .getElementById("restaurantLongitude")
-          .value
-          .trim();
-
-
-      if (!latitude || !longitude) {
-
-        alert(
-          "Please enter Latitude and Longitude."
-        );
-
-        return;
-
-      }
-
-
-      const latNumber = Number(latitude);
-      const lngNumber = Number(longitude);
-
-
-      if (
-        !Number.isFinite(latNumber) ||
-        !Number.isFinite(lngNumber)
-      ) {
-
-        alert(
-          "Please enter valid Latitude and Longitude."
-        );
-
-        return;
-
-      }
-
-
-      if (
-        latNumber < -90 ||
-        latNumber > 90
-      ) {
-
-        alert(
-          "Latitude must be between -90 and 90."
-        );
-
-        return;
-
-      }
-
-
-      if (
-        lngNumber < -180 ||
-        lngNumber > 180
-      ) {
-
-        alert(
-          "Longitude must be between -180 and 180."
-        );
-
-        return;
-
-      }
-
-
-      database
-        .ref("settings/location")
-        .set({
-
-          latitude: latNumber,
-
-          longitude: lngNumber,
-
-          updatedAt: Date.now()
-
-        })
-
-        .then(function() {
-
-          alert(
-            "✅ Restaurant location saved successfully."
-          );
-
-        })
-
-        .catch(function(error) {
-
-          alert(
-            "❌ Location save error: " +
-            error.message
-          );
-
-          console.error(
-            "Location save error:",
-            error
-          );
-
-        });
-
-    }
-
-
-    // ==========================================
-    // LOAD RESTAURANT SETTINGS
-    // ==========================================
-
-    function loadSettings() {
-
-      database
-        .ref("settings/restaurant")
-        .on("value", function(snapshot) {
-
-          const settings = snapshot.val();
-
-
-          if (!settings) {
-            return;
-          }
-
-
-          document
-            .getElementById("restaurantName")
-            .value =
-            settings.name ||
-            "Gloria Restaurant";
-
-
-          document
-            .getElementById("restaurantPhone")
-            .value =
-            settings.phone ||
-            "";
-
-
-          document
-            .getElementById("restaurantAddress")
-            .value =
-            settings.address ||
-            "";
-
-
-        }, function(error) {
-
-          console.error(
-            "Settings load error:",
-            error
-          );
-
-          const message =
-            document.getElementById(
-              "settingsMessage"
-            );
-
-          message.innerText =
-            "❌ Settin
+      const restau
