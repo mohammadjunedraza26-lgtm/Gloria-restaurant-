@@ -468,6 +468,21 @@
         <button
           class="add"
           onclick="saveSettings()">
+          <input
+  type="number"
+  id="restaurantLatitude"
+  placeholder="Latitude">
+
+<input
+  type="number"
+  id="restaurantLongitude"
+  placeholder="Longitude">
+
+<button
+  class="update"
+  onclick="saveLocation()">
+  📍 Save Location
+</button>
 
           Save Settings
 
@@ -907,6 +922,36 @@
     // ==========================================
 
     function saveSettings() {
+      function saveLocation() {
+
+  const latitude =
+    document.getElementById("restaurantLatitude").value.trim();
+
+  const longitude =
+    document.getElementById("restaurantLongitude").value.trim();
+
+  if (!latitude || !longitude) {
+    alert("Please enter Latitude and Longitude.");
+    return;
+  }
+
+  database
+    .ref("settings/location")
+    .set({
+      latitude: Number(latitude),
+      longitude: Number(longitude),
+      updatedAt: Date.now()
+    })
+
+    .then(function() {
+      alert("✅ Restaurant location saved successfully.");
+    })
+
+    .catch(function(error) {
+      alert("❌ Location save error: " + error.message);
+      console.error("Location save error:", error);
+    });
+      }
 
       const restaurantName =
         document
